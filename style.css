@@ -12,13 +12,13 @@ li , a {
     width: 1350px;
     margin: 0 auto;
 }
-.main-list {
+.main-list , .photo-list , .comment-list , .post-list , .album-list , .todo-list {
     display: flex;
     gap: 30px;
     margin-top: 40px;
     flex-wrap: wrap;
 }
-.main-list__item {
+.main-list__item , .photos-list__item , .comments-list__item , .post-list__item , .album-list__item , .todo-list__item {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,6 +26,7 @@ li , a {
     padding: 25px;
     gap: 15px;
     border-radius: 19px;
+    overflow: hidden;
     
 }
 .cart-img {
@@ -67,6 +68,10 @@ nav {
     align-items: center;
     
 }
+.nav-list {
+    display: flex;
+    gap: 40px;
+}
 .add-box {
     display: flex;
     margin-top: 20px;
@@ -87,3 +92,54 @@ input {
     border-radius: 15px;
     border: 1px solid ;
 }
+.links {
+    display: none;
+    
+}
+
+
+@media screen and (max-width: 1100px ){
+    .container{
+        width: 90%;
+        margin: 0 auto ;
+    }
+    .main-list , .photo-list , .comment-list , .post-list , .album-list , .todo-list{
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.main-list__item , .photos-list__item , .comments-list__item , .post-list__item , .album-list__item , .todo-list__item {
+    padding: 15px;
+
+}
+.nav-list{
+    display: none;
+}
+nav {
+    display: flex;
+    gap: 20px;
+  
+}
+.links {
+    display: block;
+}
+}
+@media screen and (max-width: 465px ){
+    .main-list__item , .photos-list__item , .comments-list__item , .post-list__item , .album-list__item , .todo-list__item {
+    display: flex;
+    flex-direction: column;
+
+}
+nav {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column; 
+    gap: 20px;
+  
+}
+
+}
+
+    

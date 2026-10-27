@@ -1,60 +1,54 @@
-const KEY = "users" ;
+const KEY = "users";
 const defaultImg = "https://thumbs.dreamstime.com/b/scenic-limassol-seafront-modern-skyscrapers-background-typical-sunny-day-cyprus-469976939.jpg";
-const box = document.querySelector(".main-list") ;
-const form = document.getElementById("add-form") ;
-let users = [] ;
+const box = document.querySelector(".main-list");
+const form = document.getElementById("add-form");
+let users = [];
 
-function save (){
-  sessionStorage.setItem(KEY ,JSON.stringify(users));
+function save() {
+  sessionStorage.setItem(KEY, JSON.stringify(users));
 }
 
 async function load() {
-  const saved = sessionStorage.getItem(KEY) ;
-  if(saved ){
-    users=JSON.parse(saved) ;
+  const saved = sessionStorage.getItem(KEY);
+  if (saved) {
+    users = JSON.parse(saved);
     return;
   }
 
-
   try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users") ;
-    const data = await res.json() ;
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const data = await res.json();
     
     users = data.map((u) => ({
-      id:u.id ,
-      img: defaultImg ,
-      name :u.name ,
-      username: u.username ,
-      email: u.email ,
-      adress:{city: u.address.city},
-  
+      id: u.id,
+      img: defaultImg,
+      name: u.name,
+      username: u.username,
+      email: u.email,
+      adress: { city: u.address ? u.address.city : "Noma'lum" },
     }));
     save();
+  } catch (error) {
+    console.log("xatolik yuz berdi", error);
   }
-
-
-  catch(error) {
-    console.log("xatolik yuz berdi" , error)
-  }
-  
 }
 
-
-function render(){
+function render() {
+  if (!box) return;
   box.innerHTML = users.map((i) => `
     <li class="main-list__item">
-        <img class="cart-img" src="${i.img}" alt="">
-        <ul class="cart-ul">
-          <li>Name: ${i.name}</li>
-          <li>Username: ${i.username}</li>
-          <li>Email: ${i.email}</li>
-          <li>Address: ${i.adress.city}</li>
-          <li>
-            <button class="cart-btn delete-btn" data-id="${i.id}">Delete</button>
-            <button class="cart-btn edit-btn" data-id="${i.id}">Edit</button>
-          </li>
-        </ul>
-      </li>`).join("")
+      <img class="cart-img" src="${i.img || defaultImg}" alt="${i.name}">
+      <ul class="cart-ul">
+        <li>Name: ${i.name}</li>
+        <li>Username: ${i.username}</li>
+        <li>Email: ${i.email}</li>
+        <li>Address: ${i.adress?.city}</li>
+        <li>
+          <button class="cart-btn delete-btn" data-id="${i.id}">Delete</button>
+          <button class="cart-btn edit-btn" data-id="${i.id}">Edit</button>
+        </li>
+      </ul>
+    </li>`).join("");
 }
 
 if (box) {
@@ -82,11 +76,11 @@ if (form) {
     if (editId) {
       const user = users.find((u) => u.id === editId);
       if (user) {
-        form.image.value = user.img;
+        form.image.value = user.img || defaultImg;
         form.name.value = user.name;
         form.username.value = user.username;
         form.email.value = user.email;
-        form.address.value = user.adress.city;
+        form.address.value = user.adress?.city;
 
         document.getElementById("form-title").textContent = "Edit user";
         document.getElementById("submit-btn").textContent = "Save";
@@ -99,7 +93,7 @@ if (form) {
 
     const data = new FormData(form);
     const userData = {
-      img: data.get("image"),
+      img: data.get("image") || defaultImg,
       name: data.get("name"),
       username: data.get("username"),
       email: data.get("email"),
